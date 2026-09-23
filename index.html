@@ -373,6 +373,110 @@ dialog.dlg::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
 .leaflet-popup-content strong{display:block;font-style:italic;font-weight:850;font-stretch:118%;font-size:17px;color:#000}
 @media (max-width:900px){.lojas-grid{grid-template-columns:minmax(0,1fr)}.mapa-caixa{min-height:360px;order:-1}}
 
+/* ---------- ficha do veículo (galeria + detalhes) ---------- */
+html.fc-aberta{overflow:hidden}
+dialog.ficha{border:0;padding:0;margin:auto;width:min(1200px,calc(100% - 40px));height:min(780px,calc(100dvh - 40px));max-width:none;max-height:none;border-radius:var(--r-xl);overflow:hidden;background:#fff;color:var(--texto);box-shadow:0 40px 100px rgba(0,0,0,.45)}
+dialog.ficha::backdrop{background:rgba(0,0,0,.72);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px)}
+.fc-caixa{display:grid;grid-template-columns:minmax(0,1.42fr) minmax(360px,1fr);height:100%}
+.fc-galeria{position:relative;background:#000;display:grid;grid-template-rows:minmax(0,1fr) auto;min-height:0;min-width:0}
+.fc-palco{position:relative;min-height:0}
+.fc-trilho{position:absolute;inset:0;display:flex;overflow-x:auto;overflow-y:hidden;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;outline-offset:-3px}
+.fc-trilho::-webkit-scrollbar{display:none}
+.fc-slide{flex:0 0 100%;margin:0;position:relative;display:grid;place-items:center;scroll-snap-align:center;scroll-snap-stop:always;cursor:zoom-in;overflow:hidden}
+.fc-slide img{width:100%;height:100%;object-fit:contain;-webkit-user-select:none;user-select:none;-webkit-user-drag:none}
+.fc-slide .ph{position:absolute;inset:0;background:linear-gradient(160deg,#1E1F23,#0E0E10)}
+.fc-vazio{cursor:default}
+.fc-vazio p{position:relative;z-index:1;margin:auto 24px 28px;align-self:end;color:#fff;font-weight:650;text-align:center}
+.fc-seta{position:absolute;top:50%;z-index:2;width:52px;height:52px;margin-top:-26px;border-radius:50%;border:0;background:rgba(255,255,255,.94);color:#000;display:grid;place-items:center;box-shadow:0 8px 24px rgba(0,0,0,.35);transition:opacity .2s,transform .15s}
+.fc-seta:active{transform:scale(.94)}
+.fc-seta svg{width:22px;height:22px}
+.fc-ant{left:16px}.fc-prox{right:16px}
+.fc-seta:disabled{opacity:0;pointer-events:none}
+.fc-contador{position:absolute;left:16px;bottom:16px;z-index:2;background:rgba(0,0,0,.74);color:#fff;font-weight:700;font-stretch:110%;font-size:14px;line-height:1;padding:9px 13px;border-radius:999px;font-variant-numeric:tabular-nums;pointer-events:none}
+.fc-contador:empty{display:none}
+.fc-cheia-btn{position:absolute;right:16px;bottom:16px;z-index:2;width:44px;height:44px;border-radius:50%;border:0;background:rgba(0,0,0,.74);color:#fff;display:grid;place-items:center}
+.fc-cheia-btn svg{width:20px;height:20px}
+.fc-thumbs{display:flex;gap:8px;overflow-x:auto;padding:12px 16px 14px;scrollbar-width:none;background:#000}
+.fc-thumbs::-webkit-scrollbar{display:none}
+.fc-thumbs:empty{display:none}
+.fc-thumbs button{position:relative;flex:none;width:84px;height:63px;border-radius:10px;border:0;padding:0;overflow:hidden;background:#1B1C1F;opacity:.5;transition:opacity .2s}
+.fc-thumbs button::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 3px transparent;transition:box-shadow .2s}
+.fc-thumbs button:hover{opacity:.85}
+.fc-thumbs button[aria-current="true"]{opacity:1}
+.fc-thumbs button[aria-current="true"]::after{box-shadow:inset 0 0 0 3px var(--laranja)}
+.fc-thumbs img{width:100%;height:100%;object-fit:cover}
+.fc-thumbs .ph svg{width:60%}
+.fc-galeria.uma .fc-seta,.fc-galeria.uma .fc-thumbs{display:none}
+
+.fc-info{position:relative;display:flex;flex-direction:column;min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.fc-corpo{flex:1;padding:30px 32px 26px}
+.fc-marca-linha{display:flex;align-items:center;gap:10px;margin:0 60px 12px 0;font-weight:650;font-stretch:108%;color:var(--suave);font-size:15px}
+.fc-marca-linha .selo{position:static}
+.fc-nome{font-size:clamp(34px,3.4vw,50px);line-height:.92}
+.fc-versao{margin:10px 0 0;color:var(--suave);font-size:16px;line-height:1.4}
+.fc-versao:empty{display:none}
+.fc-preco{display:flex;flex-direction:column;gap:4px;margin:22px 0 0;padding:18px 0;border-top:2px solid #000;border-bottom:1px solid var(--linha)}
+.fc-preco strong{font-style:italic;font-weight:850;font-stretch:118%;font-size:clamp(30px,2.8vw,40px);line-height:1;color:#000;letter-spacing:-.01em}
+.fc-preco strong.fc-consulta{font-size:clamp(24px,2.2vw,30px)}
+.fc-preco span{font-size:14.5px;color:var(--suave);line-height:1.4}
+.fc-specs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:20px;margin:4px 0 0}
+.fc-specs div{padding:13px 0;border-bottom:1px solid var(--nevoa);min-width:0}
+.fc-specs dt{font-size:13.5px;color:var(--suave);font-weight:600}
+.fc-specs dd{margin:2px 0 0;font-weight:750;font-stretch:108%;font-size:16.5px;color:#000;overflow-wrap:anywhere}
+.fc-bloco{margin-top:24px}
+.fc-bloco h3{margin:0 0 8px;font-size:16px;font-weight:750;font-stretch:110%;color:#000}
+.fc-bloco p{margin:0;font-size:15.5px;line-height:1.6;white-space:pre-line}
+.fc-op{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.fc-op li{font-size:13.5px;font-weight:600;padding:5px 11px;border-radius:999px;background:var(--nevoa);color:#2A2B2F}
+.fc-cod{margin:22px 0 0;font-size:13.5px;color:var(--suave)}
+.fc-acoes{position:sticky;bottom:0;z-index:3;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:10px;padding:16px 32px 22px;background:#fff;border-top:1px solid var(--prata)}
+.fc-acoes .btn{width:100%;padding:0 16px}
+.fc-acoes .fc-wa{grid-column:1/-1}
+.fc-curto{display:none}
+.fc-share{position:relative;display:flex;min-width:0}
+.fc-share-painel{position:absolute;right:0;bottom:calc(100% + 10px);width:min(300px,calc(100vw - 32px));background:#fff;border-radius:var(--r-lg);padding:8px;box-shadow:0 22px 54px rgba(0,0,0,.26),0 0 0 1px rgba(0,0,0,.06);z-index:5}
+.fc-share-painel[hidden]{display:none}
+.fc-share-painel a,.fc-share-painel button{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;padding:10px 12px;border:0;border-radius:12px;background:none;text-decoration:none;font-weight:650;font-stretch:106%;font-size:15.5px;color:#000;text-align:left}
+.fc-share-painel a:hover,.fc-share-painel button:hover{background:var(--nevoa)}
+.fc-share-painel svg{width:20px;height:20px;flex:none}
+.fc-share-painel .ico-wa{color:#1DA851;display:flex}
+.fc-share-painel [hidden]{display:none}
+.fc-aviso{margin:2px 12px 6px;font-size:13.5px;line-height:1.4;color:var(--suave)}
+.fc-aviso:empty{display:none}
+.fc-fechar{position:absolute;top:16px;right:16px;z-index:6;width:46px;height:46px;border-radius:50%;border:0;background:var(--prata);color:#000;display:grid;place-items:center}
+.fc-fechar svg{width:18px;height:18px}
+
+dialog.ficha.fc-cheia{width:100%;height:100%;height:100dvh;border-radius:0}
+.fc-cheia .fc-caixa{grid-template-columns:minmax(0,1fr)}
+.fc-cheia .fc-info{display:none}
+.fc-cheia .fc-slide{cursor:default}
+.fc-cheia .fc-fechar{background:rgba(255,255,255,.94)}
+
+@media (max-width:860px){
+  dialog.ficha{width:100%;height:100%;height:100dvh;margin:0;border-radius:0;box-shadow:none}
+  .fc-caixa{display:block;height:100%;overflow-y:auto;overscroll-behavior:contain}
+  .fc-galeria{display:block}
+  .fc-palco{aspect-ratio:4/3}
+  .fc-seta{display:none}
+  .fc-thumbs{padding:10px 14px 12px}
+  .fc-thumbs button{width:64px;height:48px}
+  .fc-info{display:block;overflow:visible}
+  .fc-corpo{padding:22px 20px 10px}
+  .fc-marca-linha{margin-right:0}
+  .fc-fechar{top:calc(12px + env(safe-area-inset-top,0px));right:12px;background:rgba(255,255,255,.94);box-shadow:0 6px 18px rgba(0,0,0,.25)}
+  .fc-acoes{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 52px;gap:8px;padding:12px 14px calc(12px + env(safe-area-inset-bottom,0px))}
+  .fc-acoes .fc-wa{grid-column:auto}
+  .fc-acoes .btn{min-height:50px;font-size:15.5px;padding:0 12px;gap:8px}
+  .fc-share .btn{width:52px;padding:0;border-radius:50%}
+  .fc-longo,.fc-share .fc-rot{display:none}
+  .fc-curto{display:inline}
+  .fc-cheia .fc-caixa{display:grid;grid-template-rows:minmax(0,1fr);overflow:hidden}
+  .fc-cheia .fc-galeria{display:grid;height:100%}
+  .fc-cheia .fc-palco{aspect-ratio:auto}
+  .fc-cheia .fc-seta{display:grid}
+}
+@media (max-width:360px){.fc-acoes .fc-wa svg{display:none}}
+
 </style>
 </head>
 <body>
@@ -658,6 +762,48 @@ dialog.dlg::backdrop{background:rgba(0,0,0,.55);backdrop-filter:blur(3px)}
     <p style="margin-top:20px;color:#5B5D64;font-size:14px">P5 Motors, Nova Iguaçu, RJ. Última atualização: setembro de 2026.</p>
   </div>
 </dialog>
+<dialog class="ficha" id="ficha" aria-labelledby="fc-nome">
+  <button class="fc-fechar" type="button" data-fechar aria-label="Fechar ficha do veículo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  <div class="fc-caixa">
+    <div class="fc-galeria">
+      <div class="fc-palco">
+        <div class="fc-trilho" id="fc-trilho" tabindex="0" aria-label="Fotos do veículo. Use as setas do teclado para trocar de foto."></div>
+        <button class="fc-seta fc-ant" type="button" data-fc="-1" aria-label="Foto anterior"></button>
+        <button class="fc-seta fc-prox" type="button" data-fc="1" aria-label="Próxima foto"></button>
+        <span class="fc-contador" id="fc-contador" aria-live="polite"></span>
+        <button class="fc-cheia-btn" type="button" id="fc-cheia" aria-label="Ver fotos em tela cheia"></button>
+      </div>
+      <div class="fc-thumbs" id="fc-thumbs" aria-label="Miniaturas"></div>
+    </div>
+    <div class="fc-info">
+      <div class="fc-corpo">
+        <p class="fc-marca-linha"><span id="fc-marca"></span><span class="selo selo-laranja" id="fc-selo" hidden>0 km</span></p>
+        <h2 class="disp fc-nome" id="fc-nome"></h2>
+        <p class="fc-versao" id="fc-versao"></p>
+        <div class="fc-preco" id="fc-preco"></div>
+        <dl class="fc-specs" id="fc-specs"></dl>
+        <section class="fc-bloco" id="fc-desc-bloco" hidden><h3>Sobre este veículo</h3><p id="fc-desc"></p></section>
+        <section class="fc-bloco" id="fc-op-bloco" hidden><h3>Itens e opcionais</h3><ul class="fc-op" id="fc-op"></ul></section>
+        <p class="fc-cod" id="fc-cod"></p>
+      </div>
+      <div class="fc-acoes">
+        <a class="btn btn-laranja fc-wa" id="fc-wa" href="#" target="_blank" rel="noopener"><span id="fc-wa-ico"></span><span class="fc-longo">Chamar no WhatsApp</span><span class="fc-curto">WhatsApp</span></a>
+        <a class="btn btn-preto" id="fc-fin" href="financiamento.html"><span class="fc-longo">Simular financiamento</span><span class="fc-curto">Financiar</span></a>
+        <div class="fc-share">
+          <button class="btn btn-linha" type="button" id="fc-share-btn" aria-expanded="false" aria-controls="fc-share-painel" aria-label="Compartilhar este veículo"><span id="fc-share-ico"></span><span class="fc-rot">Compartilhar</span></button>
+          <div class="fc-share-painel" id="fc-share-painel" hidden>
+            <a data-share="wa" href="#" target="_blank" rel="noopener"><span class="ico-wa" id="fc-sh-wa"></span>Enviar no WhatsApp</a>
+            <button type="button" data-share="copiar"><span id="fc-sh-link"></span>Copiar link</button>
+            <button type="button" data-share="nativo" hidden><span id="fc-sh-mais"></span>Mais opções</button>
+            <a data-share="foto" href="#" target="_blank" rel="noopener"><span id="fc-sh-foto"></span>Abrir foto em tamanho real</a>
+            <p class="fc-aviso" id="fc-aviso" role="status"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</dialog>
+
 <script>window.P5_ESTOQUE_EMBUTIDO=[{"id":"4294797","k":"moto","b":"Honda","m":"CG 160 Titan","v":"","y":2026,"yf":2025,"km":0,"n":1,"cam":"Manual","comb":"Flex","cor":"Vermelho","portas":0,"p":0,"c":"Street","f":0,"g":["3_053611"]},{"id":"4123566","k":"moto","b":"Honda","m":"CG 160 Titan","v":"","y":2026,"yf":2025,"km":0,"n":1,"cam":"Manual","comb":"Flex","cor":"Preto","portas":0,"p":0,"c":"Street","f":0,"g":["1_114528"]},{"id":"3841332","k":"moto","b":"Honda","m":"CG 160 Titan","v":"","y":2026,"yf":2025,"km":0,"n":1,"cam":"Manual","comb":"Flex","cor":"Cinza","portas":0,"p":0,"c":"Street","f":0,"g":["8_113452"]},{"id":"4123718","k":"moto","b":"Honda","m":"NXR 160 Bros ABS","v":"","y":2026,"yf":2025,"km":0,"n":1,"cam":"Manual","comb":"Flex","cor":"Cinza","portas":0,"p":0,"c":"Trail","f":0,"g":["2_060218"]},{"id":"4123715","k":"moto","b":"Honda","m":"NXR 160 Bros ABS","v":"","y":2026,"yf":2025,"km":0,"n":1,"cam":"Manual","comb":"Flex","cor":"Vermelho","portas":0,"p":0,"c":"Trail","f":0,"g":["2_121624"]},{"id":"4123485","k":"moto","b":"Honda","m":"PCX 160 ABS","v":"","y":2026,"yf":2025,"km":0,"n":1,"cam":"Automático","comb":"Gasolina","cor":"Azul","portas":0,"p":0,"c":"Scooter","f":0,"g":["2_113210"]},{"id":"4123529","k":"moto","b":"Honda","m":"XRE 190 Adventure","v":"","y":2026,"yf":2025,"km":0,"n":1,"cam":"Manual","comb":"Flex","cor":"Cinza","portas":0,"p":0,"c":"Trail","f":0,"g":["5_113702"]},{"id":"3881364","k":"moto","b":"Honda","m":"NC 750X","v":"","y":2025,"yf":2025,"km":0,"n":0,"cam":"Manual","comb":"Gasolina","cor":"Vermelho","portas":0,"p":0,"c":"Trail","f":0,"g":["4_032120"]},{"id":"5419809","k":"carro","b":"Fiat","m":"Argo","v":"1.0 Firefly Flex Drive Manual","y":2019,"yf":2019,"km":0,"n":0,"cam":"Manual","comb":"Flex","cor":"Preto","portas":4,"p":0,"c":"Hatch","f":0,"g":["2_034229"]},{"id":"4292781","k":"moto","b":"Honda","m":"NC 750X","v":"","y":2016,"yf":2016,"km":0,"n":0,"cam":"Manual","comb":"Gasolina","cor":"Preto","portas":0,"p":0,"c":"Trail","f":0,"g":["1_061034"]}];</script>
 <script>
 /* ============ P5 MOTORS · base ============ */
@@ -836,6 +982,271 @@ document.querySelectorAll("[data-ano]").forEach(function (el) { el.textContent =
 
 </script>
 <script>
+/* ============ P5 MOTORS · ficha do veículo (galeria, detalhes, compartilhar) ============ */
+(function () {
+  var dlg = document.getElementById("ficha");
+  if (!dlg || !window.P5) return;
+  var q = function (s) { return dlg.querySelector(s); };
+  var reduz = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var trilho = q("#fc-trilho"), thumbs = q("#fc-thumbs"), contador = q("#fc-contador"), galeria = q(".fc-galeria");
+  var painel = q("#fc-share-painel"), shareBtn = q("#fc-share-btn"), aviso = q("#fc-aviso"), btnCheia = q("#fc-cheia");
+  var lista = [], v = null, fotos = [], idx = 0, arquivo = null, sincURL = false;
+
+  function svg(d, w) { return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="' + (w || 2.2) + '" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + "</svg>"; }
+  var I = {
+    share: svg('<circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><path d="m8.6 13.5 6.8 4M15.4 6.5l-6.8 4"/>'),
+    link: svg('<path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7"/><path d="M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7"/>'),
+    mais: svg('<path d="M12 3v12M7 8l5-5 5 5"/><path d="M5 13v6a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6"/>'),
+    foto: svg('<rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/>'),
+    cheia: svg('<path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/>', 2.4),
+    sair: svg('<path d="M9 4v5H4M15 4v5h5M9 20v-5H4M15 20v-5h5"/>', 2.4)
+  };
+  P5.ICON.share = I.share;
+  q("[data-fc='-1']").innerHTML = P5.ICON.esq;
+  q("[data-fc='1']").innerHTML = P5.ICON.dir;
+  btnCheia.innerHTML = I.cheia;
+  q("#fc-wa-ico").outerHTML = P5.ICON.wa;
+  q("#fc-share-ico").outerHTML = I.share;
+  q("#fc-sh-wa").innerHTML = P5.ICON.wa;
+  q("#fc-sh-link").outerHTML = I.link;
+  q("#fc-sh-mais").outerHTML = I.mais;
+  q("#fc-sh-foto").outerHTML = I.foto;
+  if (navigator.share) q("[data-share='nativo']").hidden = false;
+
+  /* ---------- dados ---------- */
+  function ano(v) { return v.yf && v.yf !== v.y ? v.yf + "/" + v.y : String(v.y || ""); }
+  function titulo(v) { return P5.nomeCompleto(v) + (v.y ? " " + ano(v) : ""); }
+  function specs(v) {
+    var s = [];
+    if (v.y) s.push(["Ano", ano(v)]);
+    if (!v.n && v.km > 0) s.push(["Quilometragem", P5.kmFmt(v.km)]);
+    if (v.cam) s.push(["Câmbio", v.cam]);
+    if (v.comb) s.push(["Combustível", v.comb]);
+    if (v.cor) s.push(["Cor", v.cor]);
+    if (v.c) s.push([v.k === "moto" ? "Estilo" : "Carroceria", v.c]);
+    if (v.k === "carro" && v.portas > 0) s.push(["Portas", String(v.portas)]);
+    s.push(["Condição", v.n ? "0 km" : (v.k === "moto" ? "Seminova" : "Seminovo")]);
+    return s;
+  }
+  function opcionais(v) {
+    var o = v.op || v.opc || v.opcionais || [];
+    if (typeof o === "string") o = o.split(/\s*[,;|]\s*/);
+    return (o || []).map(function (x) { return String(x).trim(); }).filter(Boolean);
+  }
+  function descricao(v) { return String(v.obs || v.desc || v.d || "").trim(); }
+  function textoShare() {
+    var extra = [v.n ? "0 km" : (v.km > 0 ? P5.kmFmt(v.km) : ""), v.p > 0 ? P5.brl(v.p) : ""].filter(Boolean).join(", ");
+    return titulo(v) + (extra ? " (" + extra + ")" : "") + " na P5 Motors";
+  }
+
+  /* ---------- galeria ---------- */
+  function montarGaleria() {
+    idx = 0;
+    galeria.classList.toggle("uma", fotos.length < 2);
+    btnCheia.hidden = !fotos.length;
+    if (!fotos.length) {
+      trilho.innerHTML = '<div class="fc-slide fc-vazio">' + P5.phHTML() + "<p>Fotos chegando. Peça pelo WhatsApp que a gente manda na hora.</p></div>";
+      thumbs.innerHTML = "";
+      marcar();
+      return;
+    }
+    var alt = P5.esc(titulo(v));
+    trilho.innerHTML = fotos.map(function (src, i) {
+      return '<figure class="fc-slide" role="group" aria-roledescription="foto" aria-label="Foto ' + (i + 1) + " de " + fotos.length + '">' +
+        '<img src="' + P5.esc(src) + '" alt="' + alt + ", foto " + (i + 1) + '"' + (i < 2 ? "" : ' loading="lazy"') + ' decoding="async" draggable="false" onerror="P5.imgErro(this)"></figure>';
+    }).join("");
+    thumbs.innerHTML = fotos.length > 1 ? fotos.map(function (src, i) {
+      return '<button type="button" data-fc-ir="' + i + '" aria-label="Ver foto ' + (i + 1) + '" aria-current="' + (i === 0) + '"><img src="' + P5.esc(src) + '" alt="" loading="lazy" decoding="async" onerror="P5.imgErro(this)"></button>';
+    }).join("") : "";
+    trilho.scrollLeft = 0;
+    marcar();
+  }
+  function marcar() {
+    contador.textContent = fotos.length > 1 ? (idx + 1) + " / " + fotos.length : "";
+    var bs = thumbs.querySelectorAll("button");
+    for (var i = 0; i < bs.length; i++) {
+      var on = i === idx;
+      bs[i].setAttribute("aria-current", on ? "true" : "false");
+      if (on) thumbs.scrollTo({ left: bs[i].offsetLeft - thumbs.clientWidth / 2 + bs[i].clientWidth / 2, behavior: reduz ? "auto" : "smooth" });
+    }
+    q("[data-fc='-1']").disabled = idx <= 0;
+    q("[data-fc='1']").disabled = idx >= fotos.length - 1;
+    if (!painel.hidden) atualizarPainel();
+  }
+  function ir(i, suave) {
+    if (!fotos.length) return;
+    idx = Math.max(0, Math.min(fotos.length - 1, i));
+    trilho.scrollTo({ left: idx * trilho.clientWidth, behavior: suave && !reduz ? "smooth" : "auto" });
+    marcar();
+  }
+  var rolando;
+  trilho.addEventListener("scroll", function () {
+    clearTimeout(rolando);
+    rolando = setTimeout(function () {
+      var n = Math.round(trilho.scrollLeft / Math.max(1, trilho.clientWidth));
+      if (n !== idx && n >= 0 && n < fotos.length) { idx = n; marcar(); }
+    }, 70);
+  }, { passive: true });
+  window.addEventListener("resize", function () { if (dlg.open) ir(idx, false); });
+
+  function cheia(on) {
+    dlg.classList.toggle("fc-cheia", on);
+    btnCheia.innerHTML = on ? I.sair : I.cheia;
+    btnCheia.setAttribute("aria-label", on ? "Sair da tela cheia" : "Ver fotos em tela cheia");
+    requestAnimationFrame(function () { ir(idx, false); });
+  }
+
+  /* ---------- preencher ---------- */
+  function preencher() {
+    q("#fc-marca").textContent = v.b || "";
+    q("#fc-selo").hidden = !v.n;
+    q("#fc-nome").textContent = P5.nome(v);
+    q("#fc-versao").textContent = v.v || (v.k === "moto" ? "Moto " + (v.n ? "0 km" : "seminova") : "");
+    q("#fc-preco").innerHTML = v.p > 0
+      ? "<strong>" + P5.brl(v.p) + "</strong><span>Aceitamos troca. Entrada e parcelas você simula com o consultor.</span>"
+      : '<strong class="fc-consulta">Preço sob consulta</strong><span>O consultor passa o valor e as condições pelo WhatsApp.</span>';
+    q("#fc-specs").innerHTML = specs(v).map(function (s) { return "<div><dt>" + P5.esc(s[0]) + "</dt><dd>" + P5.esc(s[1]) + "</dd></div>"; }).join("");
+    var d = descricao(v), op = opcionais(v);
+    q("#fc-desc-bloco").hidden = !d; q("#fc-desc").textContent = d;
+    q("#fc-op-bloco").hidden = !op.length;
+    q("#fc-op").innerHTML = op.map(function (o) { return "<li>" + P5.esc(o) + "</li>"; }).join("");
+    q("#fc-cod").textContent = "Código do anúncio: " + v.id;
+    q("#fc-wa").href = P5.wa(P5.msgInteresse(v));
+    q("#fc-fin").href = "financiamento.html?v=" + encodeURIComponent(v.id);
+  }
+
+  /* ---------- compartilhar ---------- */
+  function atualizarPainel() {
+    q("[data-share='wa']").href = "https://wa.me/?text=" + encodeURIComponent(textoShare() + "\n" + P5.linkVeiculo(v));
+    var f = q("[data-share='foto']");
+    f.hidden = !fotos[idx];
+    if (fotos[idx]) f.href = fotos[idx];
+    prepararArquivo();
+  }
+  function abrirPainel() {
+    painel.hidden = false;
+    shareBtn.setAttribute("aria-expanded", "true");
+    aviso.textContent = "";
+    atualizarPainel();
+    var p = painel.querySelector("a,button:not([hidden])");
+    if (p) p.focus();
+  }
+  function fecharPainel() { painel.hidden = true; shareBtn.setAttribute("aria-expanded", "false"); }
+
+  // Prepara a foto atual como arquivo para o compartilhamento nativo (só funciona se o servidor das fotos liberar CORS).
+  function prepararArquivo() {
+    if (!navigator.canShare || !window.fetch || !window.File || !fotos[idx]) return;
+    var alvo = v.id + ":" + idx;
+    if (arquivo && arquivo.alvo === alvo) return;
+    var meu = arquivo = { alvo: alvo, file: null };
+    var ctrl = window.AbortController ? new AbortController() : null;
+    var t = setTimeout(function () { if (ctrl) ctrl.abort(); }, 4000);
+    fetch(fotos[idx], { mode: "cors", signal: ctrl ? ctrl.signal : undefined })
+      .then(function (r) { if (!r.ok) throw new Error("foto"); return r.blob(); })
+      .then(function (b) {
+        clearTimeout(t);
+        var nome = ("p5-" + P5.nomeCompleto(v) + "-" + (idx + 1)).toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-") + ".jpg";
+        var file = new File([b], nome, { type: b.type || "image/jpeg" });
+        if (navigator.canShare({ files: [file] }) && arquivo === meu) meu.file = file;
+      })
+      .catch(function () { clearTimeout(t); });
+  }
+  function copiar(texto) {
+    function antigo() {
+      var ta = document.createElement("textarea");
+      ta.value = texto; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
+      dlg.appendChild(ta); ta.select();
+      var ok = false; try { ok = document.execCommand("copy"); } catch (e) {}
+      ta.remove(); return ok;
+    }
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(texto).then(function () { return true; }, antigo);
+    return Promise.resolve(antigo());
+  }
+  function compartilharNativo() {
+    var dados = { title: titulo(v), text: textoShare(), url: P5.linkVeiculo(v) };
+    var p;
+    if (arquivo && arquivo.file) p = navigator.share({ files: [arquivo.file], title: dados.title, text: dados.text + "\n" + dados.url });
+    else p = navigator.share(dados);
+    p.then(fecharPainel, function (e) {
+      if (e && e.name === "AbortError") return;
+      navigator.share(dados).then(fecharPainel, function () {});
+    });
+  }
+
+  /* ---------- eventos ---------- */
+  dlg.addEventListener("click", function (e) {
+    if (e.target === dlg) { dlg.close(); return; }
+    var t = e.target.closest("[data-fc],[data-fc-ir],[data-share],#fc-cheia,#fc-share-btn,.fc-slide");
+    if (!painel.hidden && !e.target.closest(".fc-share")) fecharPainel();
+    if (!t) return;
+    if (t.hasAttribute("data-fc")) ir(idx + Number(t.getAttribute("data-fc")), true);
+    else if (t.hasAttribute("data-fc-ir")) ir(Number(t.getAttribute("data-fc-ir")), true);
+    else if (t.id === "fc-cheia") cheia(!dlg.classList.contains("fc-cheia"));
+    else if (t.id === "fc-share-btn") { if (painel.hidden) abrirPainel(); else fecharPainel(); }
+    else if (t.classList.contains("fc-slide")) { if (fotos.length && !dlg.classList.contains("fc-cheia")) cheia(true); }
+    else {
+      var acao = t.getAttribute("data-share");
+      if (acao === "copiar") {
+        copiar(P5.linkVeiculo(v)).then(function (ok) {
+          aviso.textContent = ok ? "Link copiado. É só colar na conversa." : "Não deu para copiar. Link: " + P5.linkVeiculo(v);
+        });
+      } else if (acao === "nativo") compartilharNativo();
+      else if (acao === "wa" || acao === "foto") setTimeout(fecharPainel, 50);
+    }
+  });
+  dlg.addEventListener("keydown", function (e) {
+    if (e.target.closest("input,textarea,select")) return;
+    if (e.key === "ArrowLeft") { e.preventDefault(); ir(idx - 1, true); }
+    else if (e.key === "ArrowRight") { e.preventDefault(); ir(idx + 1, true); }
+  });
+  dlg.addEventListener("cancel", function (e) {
+    if (!painel.hidden) { e.preventDefault(); fecharPainel(); shareBtn.focus(); }
+    else if (dlg.classList.contains("fc-cheia")) { e.preventDefault(); cheia(false); }
+  });
+  dlg.addEventListener("close", function () {
+    document.documentElement.classList.remove("fc-aberta");
+    fecharPainel();
+    dlg.classList.remove("fc-cheia");
+    btnCheia.innerHTML = I.cheia;
+    if (sincURL) history.replaceState(history.state, "", comParam("v", null));
+  });
+  function comParam(k, val) {
+    var u = new URL(location.href);
+    if (val == null) u.searchParams.delete(k); else u.searchParams.set(k, val);
+    return u.pathname + u.search + u.hash;
+  }
+
+  // Qualquer elemento com data-abrir fora da ficha abre o veículo aqui mesmo.
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest("[data-abrir]");
+    if (!b || dlg.contains(b)) return;
+    if (P5.ficha.abrir(b.getAttribute("data-abrir"))) e.preventDefault();
+  });
+
+  P5.ficha = {
+    definirLista: function (l) { lista = l || []; },
+    sincronizarURL: function (s) { sincURL = !!s; },
+    abrir: function (id) {
+      var achado = null;
+      for (var i = 0; i < lista.length; i++) if (String(lista[i].id) === String(id)) { achado = lista[i]; break; }
+      if (!achado) return false;
+      v = achado; fotos = P5.fotos(v); arquivo = null;
+      fecharPainel();
+      dlg.classList.remove("fc-cheia");
+      btnCheia.innerHTML = I.cheia;
+      preencher();
+      if (!dlg.open) { if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", ""); }
+      document.documentElement.classList.add("fc-aberta");
+      montarGaleria();
+      q(".fc-info").scrollTop = 0; q(".fc-caixa").scrollTop = 0;
+      if (sincURL) history.replaceState(history.state, "", comParam("v", v.id));
+      return true;
+    }
+  };
+})();
+
+</script>
+<script>
 (function () {
   var $ = function (s, c) { return (c || document).querySelector(s); };
   var reduz = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -849,6 +1260,7 @@ document.querySelectorAll("[data-ano]").forEach(function (el) { el.textContent =
     montarPalco(lista);
     montarAtalhos(lista);
     montarTrilho(lista);
+    if (P5.ficha) P5.ficha.definirLista(lista);
   });
 
   function escolherDestaques(lista) {
@@ -879,7 +1291,7 @@ document.querySelectorAll("[data-ano]").forEach(function (el) { el.textContent =
       }, animar && !reduz ? 180 : 0);
       var sub = [v.b, v.y, v.n ? "0 km" : (v.km > 0 ? P5.kmFmt(v.km) : "")].filter(Boolean).join(", ");
       info.innerHTML = '<div><span class="tag">' + P5.esc(sub) + '</span><strong class="palco-nome">' + P5.esc(P5.nome(v)) + "</strong></div>" +
-        '<a class="btn btn-laranja btn-sm" href="estoque.html?v=' + encodeURIComponent(v.id) + '">Ver detalhes</a>';
+        '<a class="btn btn-laranja btn-sm" href="estoque.html?v=' + encodeURIComponent(v.id) + '" data-abrir="' + P5.esc(v.id) + '">Ver detalhes</a>';
       thumbs.querySelectorAll("button").forEach(function (b, j) { b.setAttribute("aria-pressed", j === i ? "true" : "false"); });
     }
     thumbs.innerHTML = dest.map(function (v, i) {
@@ -913,7 +1325,7 @@ document.querySelectorAll("[data-ano]").forEach(function (el) { el.textContent =
       '<div class="fim"><strong>Tem ' + lista.length + (lista.length === 1 ? " veículo" : " veículos") + ' no estoque</strong><a class="btn btn-laranja" href="estoque.html">Ver todos</a></div>';
     t.addEventListener("click", function (e) {
       var b = e.target.closest("[data-abrir]");
-      if (b) location.href = "estoque.html?v=" + encodeURIComponent(b.getAttribute("data-abrir"));
+      if (b && !P5.ficha) location.href = "estoque.html?v=" + encodeURIComponent(b.getAttribute("data-abrir"));
     });
     var prev = document.querySelector("[data-trilho='-1']"), next = document.querySelector("[data-trilho='1']");
     function estado() {
