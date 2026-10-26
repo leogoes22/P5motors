@@ -1432,10 +1432,17 @@ document.querySelectorAll("[data-ano]").forEach(function (el) { el.textContent =
       marcadores[chave].openPopup();
     }
   }
+  /* o rótulo do pino fica à direita do ponto: reserva mais espaço desse lado */
+  function margens(o) {
+    var w = caixa.clientWidth || 360;
+    o.paddingTopLeft = [30, 60];
+    o.paddingBottomRight = [Math.min(220, Math.round(w * .5)), 40];
+    return o;
+  }
   function verAmbas() {
     if (!mapa) return;
     mapa.closePopup();
-    mapa.flyToBounds([[LOJAS.motos.lat, LOJAS.motos.lng], [LOJAS.carros.lat, LOJAS.carros.lng]], { padding: [80, 80], duration: reduz ? 0 : .8 });
+    mapa.flyToBounds([[LOJAS.motos.lat, LOJAS.motos.lng], [LOJAS.carros.lat, LOJAS.carros.lng]], margens({ duration: reduz ? 0 : .8 }));
   }
   document.querySelectorAll(".unidade").forEach(function (u) {
     function ativar(e) { if (e.target.closest("a")) return; selecionar(u.getAttribute("data-unidade"), true); }
@@ -1448,9 +1455,10 @@ document.querySelectorAll("[data-ano]").forEach(function (el) { el.textContent =
     if (!window.L) { caixa.innerHTML = '<div class="mapa-erro"><p>Não foi possível carregar o mapa.<br><a class="link" href="' + LOJAS.motos.rota + '" target="_blank" rel="noopener">Abrir no Google Maps</a></p></div>'; return; }
     mapa = L.map(caixa, { scrollWheelZoom: false, dragging: !L.Browser.mobile, tap: false, zoomControl: true, attributionControl: true })
       .setView([-22.7442, -43.4536], 15);
-    L.tileLayer("https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png", {
-      maxZoom: 19, subdomains: "abcd",
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="https://carto.com/attributions">CARTO</a>'
+    /* tiles gratuitos do OpenStreetMap (sem chave de API) */
+    L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      maxZoom: 19,
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'
     }).addTo(mapa);
     Object.keys(LOJAS).forEach(function (k) {
       var l = LOJAS[k];
@@ -1459,7 +1467,7 @@ document.querySelectorAll("[data-ano]").forEach(function (el) { el.textContent =
         .bindPopup("<strong>" + l.nome + "</strong>" + P5.esc(l.end) + '<br><a class="link" href="' + l.rota + '" target="_blank" rel="noopener">Traçar rota</a>', { offset: [60, -14] })
         .on("click", function () { selecionar(k, false); });
     });
-    mapa.fitBounds([[LOJAS.motos.lat, LOJAS.motos.lng], [LOJAS.carros.lat, LOJAS.carros.lng]], { padding: [80, 80] });
+    mapa.fitBounds([[LOJAS.motos.lat, LOJAS.motos.lng], [LOJAS.carros.lat, LOJAS.carros.lng]], margens({}));
     var dica = $("#mapa-dica");
     function liberar() { mapa.scrollWheelZoom.enable(); mapa.dragging.enable(); dica.classList.add("some"); }
     mapa.once("click", liberar);
