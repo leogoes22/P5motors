@@ -1,6 +1,37 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
+<script>
+/* P5: estoque confirmado, antecipado e compartilhado entre páginas por 60s. */
+window.P5_STOCK_READY=(async function(){
+  const key='p5:estoque-confirmado:v1',endpoint='https://webhook.lv-mktdeconversa.com/webhook/estoque-p5';
+  function valido(d){return d && d.ok===true && Array.isArray(d.veiculos) && Number.isInteger(d.total) && d.total===d.veiculos.length &&
+    new Set(d.veiculos.map(v=>v && String(v.id))).size===d.veiculos.length &&
+    d.veiculos.every(v=>v && v.id && typeof v.b==='string' && typeof v.m==='string' && Array.isArray(v.g));}
+  function result(d){return {veiculos:d.veiculos,info:{fonte:d.fonte||'cache',atualizadoEm:d.atualizadoEm}};}
+  try{
+    const saved=JSON.parse(localStorage.getItem(key)),age=saved && Date.now()-saved.at;
+    if(saved && age>=0 && age<60000 && valido(saved.data))return result(saved.data);
+  }catch(e){}
+  const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),20000);
+  try{
+    const r=await fetch(endpoint,{cache:'no-store',signal:ctrl.signal});
+    if(!r.ok)throw new Error('Estoque indisponível');
+    const d=await r.json();if(!valido(d))throw new Error('Catálogo incompleto ou inválido');
+    try{localStorage.setItem(key,JSON.stringify({at:Date.now(),data:d}));}catch(e){}
+    return result(d);
+  }finally{clearTimeout(timer);}
+})().catch(function(){
+  function aviso(){
+    if(document.getElementById('p5-stock-error'))return;
+    const el=document.createElement('p');el.id='p5-stock-error';el.setAttribute('role','alert');
+    el.style.cssText='padding:18px;background:#fff3cd;color:#453511;text-align:center';
+    el.textContent='Não foi possível consultar o estoque agora. Fale com nossa equipe pelo WhatsApp para confirmar os veículos disponíveis.';
+    (document.querySelector('main')||document.body).prepend(el);
+  }
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',aviso,{once:true});else aviso();
+  return {veiculos:[],info:{fonte:'indisponivel'},erro:true};
+});</script>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Financiamento de motos e carros | P5 Motors</title>
@@ -493,7 +524,7 @@ details.faq p{margin:0 0 22px;color:var(--suave);max-width:60ch}
 /* ============ P5 MOTORS · base ============ */
 var P5 = window.P5 = {
   WA: "5521979182249",
-  ESTOQUE_API: "https://apin8n.lv-mktdeconversa.com/webhook/estoque-p5",
+  ESTOQUE_API: "https://webhook.lv-mktdeconversa.com/webhook/estoque-p5",
   FOTO_BASE: "https://www.autocerto.com/fotos/4361/",
   WEBHOOK_FINANCIAMENTO: "https://apin8n.lv-mktdeconversa.com/webhook/financiamento-p5",
   WEBHOOK_CONSIGNACAO: "https://apin8n.lv-mktdeconversa.com/webhook/consignacao-p5",
@@ -533,28 +564,7 @@ P5.ICON = {
 };
 
 /* ---------- estoque: webhook com fallback embutido ---------- */
-P5.carregarEstoque = function () {
-  var embutido = (window.P5_ESTOQUE_EMBUTIDO || []).slice();
-  if (P5._estoque) return P5._estoque;
-  P5._estoque = new Promise(function (resolve) {
-    var pronto = false;
-    function fim(lista, info) { if (pronto) return; pronto = true; resolve({ veiculos: lista, info: info }); }
-    if (!P5.ESTOQUE_API || !window.fetch) return fim(embutido, { fonte: "embutido" });
-    var ctrl = window.AbortController ? new AbortController() : null;
-    var timer = setTimeout(function () { if (ctrl) ctrl.abort(); fim(embutido, { fonte: "embutido" }); }, 4500);
-    fetch(P5.ESTOQUE_API, { cache: "no-store", signal: ctrl ? ctrl.signal : undefined })
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        clearTimeout(timer);
-        if (d && d.ok === true && Array.isArray(d.veiculos) && d.veiculos.length) {
-          d.veiculos.forEach(function (v) { v.id = String(v.id); v.g = v.g || []; });
-          fim(d.veiculos, { fonte: d.fonte || "cache", atualizadoEm: d.atualizadoEm });
-        } else fim(embutido, { fonte: "embutido" });
-      })
-      .catch(function () { clearTimeout(timer); fim(embutido, { fonte: "embutido" }); });
-  });
-  return P5._estoque;
-};
+P5.carregarEstoque = function () { return P5._estoque || (P5._estoque = window.P5_STOCK_READY); };
 
 P5.cardHTML = function (v) {
   var fotos = P5.fotos(v);
